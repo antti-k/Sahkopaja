@@ -54,12 +54,12 @@ function GUI1_OpeningFcn(hObject, eventdata, handles, varargin)
 
 
 % Setup
-clear all
+global a pd;
 a = arduino('/dev/tty.usbmodem411','uno')
 pd = i2cdev(a,'0x23')
 write(pd, 1, 'uint8');
 write(pd, 16, 'uint8');
-data = zeros(100,1);
+writeDigitalPin(a,'D2',1)
 
 % Choose default command line output for GUI1
 handles.output = hObject;
@@ -87,3 +87,16 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global a pd;
+data = zeros(100,1);
+writeDigitalPin(a,'D2',0)
+writeDigitalPin(a,'D4',1)
+for i = 1:100
+    value = read(pd, 2,'uint8');
+    data(i) = uint16(bitshift(uint16(value(1)),8)) + uint16(value(2));
+    pause(0.2)
+    plot(data)
+end
+writeDigitalPin(a,'D4',0)
+writeDigitalPin(a,'D2',1)
