@@ -55,7 +55,7 @@ function GUI1_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Setup
 global a pd;
-a = arduino('/dev/tty.usbmodem411','uno')
+a = arduino('/dev/tty.usbmodem641','uno')
 pd = i2cdev(a,'0x23')
 write(pd, 1, 'uint8');
 write(pd, 16, 'uint8');
