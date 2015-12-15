@@ -69,11 +69,6 @@ imshow(matlabImage, 'XData', [1 900])
 axis off
 axis image
 
-axes(handles.axes1)
-plot(x,vanha)
-ylabel('Intensiteetti')
-xlabel('Aallonpituus (nm)')
-
 
 % Choose default command line output for GUI1
 handles.output = hObject;
@@ -116,8 +111,7 @@ for i = 1:25
     writePosition(s,0.2+i*0.02)
     plot(x, data,x,vanha)
     ylabel('Intensiteetti')
-    xlabel('Aallonpituus (nm)')
-    legend('Uusi mittaus', 'Aikaisempi mittaus')
+    xlabel('Aallonpituus (
 end
 vanha=data;
 
