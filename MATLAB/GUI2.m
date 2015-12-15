@@ -54,19 +54,13 @@ function GUI1_OpeningFcn(hObject, eventdata, handles, varargin)
 
 
 % Setup
-global a pd s;
+global a pd;
 a = arduino('/dev/tty.usbmodem641','uno')
 pd = i2cdev(a,'0x23')
 write(pd, 1, 'uint8');
 write(pd, 16, 'uint8');
 writeDigitalPin(a,'D2',1)
 s = servo(a,'D4')
-axes(handles.axes2)
-matlabImage = imread('Spektri.png');
-imshow(matlabImage, 'XData', [1 900])
-axis off
-axis image
-
 
 % Choose default command line output for GUI1
 handles.output = hObject;
@@ -95,26 +89,18 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global a pd s;
-data = zeros(25,1);
-vanha = zeros(25,1);
+global a pd;
+data = zeros(100,1);
 writeDigitalPin(a,'D2',0)
 writeDigitalPin(a,'D7',1)
-writePosition(s,0.2)
-pause(0.5)
 
-
-axes(handles.axes1)
-for i = 1:25
+for i = 1:26
     value = read(pd, 2,'uint8');
     data(i) = uint16(bitshift(uint16(value(1)),8)) + uint16(value(2));
-    pause(1)
-    writePosition(s,0.2+i*0.02)
+    pause(0.1)
+    writePosition(s,0.18+i*0.02)
     plot(data)
 end
-hold on
 
-writePosition(s,0.2)
-pause(0.5)
 writeDigitalPin(a,'D7',0)
 writeDigitalPin(a,'D2',1)

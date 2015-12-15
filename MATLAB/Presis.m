@@ -1,6 +1,6 @@
 %% Setup
 clear all
-a = arduino('/dev/tty.usbmodem411','uno')
+a = arduino('/dev/tty.usbmodem641','uno')
 %% I2C Setup
 pd = i2cdev(a,'0x23')
 write(pd, 1, 'uint8');
