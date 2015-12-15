@@ -54,7 +54,9 @@ function GUI1_OpeningFcn(hObject, eventdata, handles, varargin)
 
 
 % Setup
-global a pd s;
+global a pd s vanha x;
+vanha = zeros(25,1);
+x = linspace(400,700,25);
 a = arduino('/dev/tty.usbmodem641','uno')
 pd = i2cdev(a,'0x23')
 write(pd, 1, 'uint8');
@@ -95,9 +97,8 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global a pd s;
+global a pd s x vanha;
 data = zeros(25,1);
-vanha = zeros(25,1);
 writeDigitalPin(a,'D2',0)
 writeDigitalPin(a,'D7',1)
 writePosition(s,0.2)
@@ -110,9 +111,13 @@ for i = 1:25
     data(i) = uint16(bitshift(uint16(value(1)),8)) + uint16(value(2));
     pause(1)
     writePosition(s,0.2+i*0.02)
-    plot(data)
+    plot(x, data)
+    hold on 
+    plot(x,vanha)
+    plot(x,abs(data-vanha))
+    hold off
 end
-hold on
+vanha=data;
 
 writePosition(s,0.2)
 pause(0.5)
